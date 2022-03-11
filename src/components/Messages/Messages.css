@@ -1,0 +1,18 @@
+.messages {
+  height: calc(100vh - 100px);
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  border: 0.1px solid rgba(204, 204, 204, 0.5);
+}
+.messages__dialogs {
+  position: relative;
+
+}
+
+.messages__dialogs--form {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+
+}
