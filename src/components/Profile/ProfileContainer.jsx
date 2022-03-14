@@ -7,7 +7,8 @@ import {useMatch} from 'react-router-dom'
 
 class ProfileContainer extends React.Component {
   componentDidMount() {
-    let userId = this.props.match.params.userId
+    let userId = this?.props?.match?.params?.userId
+    if(!userId) userId = 22715
     axios
       .get("https://social-network.samuraijs.com/api/1.0/profile/" + userId)
       .then((res) => {
@@ -31,6 +32,7 @@ export const withRouter = (Component) =>{
     let RouterComponent = (props) => {
 
             const match = useMatch('/profile/:userId');
+            
 
             return <Component {...props} match={match}/>;
 

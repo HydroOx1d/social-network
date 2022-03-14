@@ -3,3 +3,8 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.header__login a {
+  color: #ffff;
+  text-decoration: none;
+}

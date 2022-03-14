@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./components/Header/Header";
+import HeaderContainer from "./components/Header/HeaderContainer";
 import News from "./components/News/News";
 import MessagesContainer from "./components/Messages/MessagesContainer";
 import UsersContainer from "./components/Users/UsersContainer";
@@ -11,7 +11,7 @@ const App = (props) => {
     <BrowserRouter>
       <div className="app">
         <div className="container">
-          <Header />
+          <HeaderContainer />
           <Routes>
             <Route path={"/profile/*"} element={<ProfileContainer />} />
             <Route path={"/messages/*"} element={<MessagesContainer />} />

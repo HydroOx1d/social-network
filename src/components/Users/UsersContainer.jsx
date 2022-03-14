@@ -3,6 +3,7 @@ import Users from "./Users";
 import {
   offPreloader,
   onFollow,
+  onUnFollow,
   onSetUsers,
   setActivePag,
 } from "../../redux/usersReducer";
@@ -13,7 +14,9 @@ class UsersAPIComponent extends React.Component {
   componentDidMount() {
     axios
       .get(
-        `https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${this.props.pageSize}`
+        `https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${this.props.pageSize}`, {
+          withCredentials: true
+        }
       )
       .then((res) => {
         this.props.onSetUsers(res.data.items);
@@ -26,7 +29,9 @@ class UsersAPIComponent extends React.Component {
     this.props.offPreloader(true);
     axios
       .get(
-        `https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${p}`
+        `https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${p}`, {
+          withCredentials: true
+        }
       )
       .then((res) => {
         this.props.onSetUsers(res.data.items);
@@ -43,6 +48,7 @@ class UsersAPIComponent extends React.Component {
         totalCount={this.props.totalCount}
         count={this.props.count}
         onFollow={this.props.onFollow}
+        onUnFollow={this.props.onUnFollow}
         preloader={this.props.preloader}
         offPreloader={this.props.offPreloader}
       />
@@ -64,6 +70,7 @@ const mapStateToProps = (state) => {
 
 const UsersContainer = connect(mapStateToProps, {
   onFollow,
+  onUnFollow,
   onSetUsers,
   setActivePag,
   offPreloader,
