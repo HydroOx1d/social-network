@@ -1,8 +1,10 @@
 import './Messages.css'
 import MessagesPerson from "./MessagesPerson/MessagesPerson";
 import MessagesDialog from "./MessagesDialog/MessagesDialog";
+import { Navigate } from 'react-router-dom';
 
 const Messages = (props) => {
+
   return (
     <div className={'messages'}>
       <div className="messages__person">

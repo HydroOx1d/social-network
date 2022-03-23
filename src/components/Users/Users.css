@@ -48,6 +48,10 @@
   opacity: .8;
 }
 
+.users__follow button.is-disable {
+  cursor: wait
+}
+
 .users__pagination {
   margin: 30px 0;
 }

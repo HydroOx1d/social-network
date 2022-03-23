@@ -1,3 +1,5 @@
+import {accessToApiProp} from '../api/api'
+
 let initialState = {
   profilePostData: [
     { id: 1, text: "О, вот и новый пост :)" },
@@ -6,6 +8,7 @@ let initialState = {
   ],
   profileAddPostValues: "",
   profileData: null,
+  status: ''
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -33,6 +36,12 @@ const profileReducer = (state = initialState, action) => {
         profileData: action.profileData,
       };
     }
+    case "SET-STATUS": {
+      return {
+        ...state,
+        status: action.status
+      }
+    }
   }
   return state;
 };
@@ -47,4 +56,31 @@ export const addProfilePost = () => {
 export const setProfile = (profileData) => {
   return { type: "SET-PROFILE", profileData };
 };
+
+export const setStatus = (status) => {
+  return {
+    type: 'SET-STATUS', status: status
+  }
+}
+
+export const setProfileDataThunk = (userId) => {
+  return dispatch => {
+    accessToApiProp.setProfileData(userId).then((data) => {
+      dispatch(setProfile(data));
+    });
+  }
+}
+
+export const setStatusThunk = (userId) => (dispatch) => {
+  accessToApiProp.getProfileStatus(userId).then((data) => {
+    dispatch(setStatus(data))
+  });
+} 
+export const updateStatusThunk = (status) => (dispatch) => {
+  accessToApiProp.updateProfileStatus(status).then(res => {
+    if(res.data.resultCode === 0) {
+      dispatch(setStatus(status))
+    }
+  })
+}
 export default profileReducer;

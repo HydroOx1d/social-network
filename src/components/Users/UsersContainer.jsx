@@ -1,42 +1,23 @@
 import { connect } from "react-redux";
 import Users from "./Users";
 import {
-  offPreloader,
-  onFollow,
-  onUnFollow,
-  onSetUsers,
+  onFollowThunk,
+  onUnFollowThunk,
   setActivePag,
+  getUsersThunk,
 } from "../../redux/usersReducer";
 import React from "react";
-import * as axios from "axios";
+import { requireAuthHOC } from "../../hoc/requireAuth";
+import { compose } from "redux";
 
 class UsersAPIComponent extends React.Component {
   componentDidMount() {
-    axios
-      .get(
-        `https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${this.props.pageSize}`, {
-          withCredentials: true
-        }
-      )
-      .then((res) => {
-        this.props.onSetUsers(res.data.items);
-        this.props.offPreloader(false);
-      });
+    this.props.getUsersThunk(this.props.count, this.props.page);
   }
 
   onSetActivePag = (p) => {
     this.props.setActivePag(p);
-    this.props.offPreloader(true);
-    axios
-      .get(
-        `https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${p}`, {
-          withCredentials: true
-        }
-      )
-      .then((res) => {
-        this.props.onSetUsers(res.data.items);
-        this.props.offPreloader(false);
-      });
+    this.props.getUsersThunk(this.props.count, p);
   };
 
   render() {
@@ -47,10 +28,12 @@ class UsersAPIComponent extends React.Component {
         activePag={this.props.activePag}
         totalCount={this.props.totalCount}
         count={this.props.count}
-        onFollow={this.props.onFollow}
-        onUnFollow={this.props.onUnFollow}
+        onFollow={this.props.onFollowThunk}
+        onUnFollow={this.props.onUnFollowThunk}
         preloader={this.props.preloader}
         offPreloader={this.props.offPreloader}
+        isFollowing={this.props.isFollowing}
+        setIsFollowing={this.props.setIsFollowing}
       />
     );
   }
@@ -65,15 +48,15 @@ const mapStateToProps = (state) => {
     totalCount: state.usersPage.totalCount,
     activePag: state.usersPage.activePag,
     preloader: state.usersPage.preloader,
+    isFollowing: state.usersPage.isFollowing,
   };
 };
 
-const UsersContainer = connect(mapStateToProps, {
-  onFollow,
-  onUnFollow,
-  onSetUsers,
-  setActivePag,
-  offPreloader,
-})(UsersAPIComponent);
-
-export default UsersContainer;
+export default compose(
+  connect(mapStateToProps, {
+    onFollowThunk,
+    onUnFollowThunk,
+    setActivePag,
+    getUsersThunk,
+  }),
+)(UsersAPIComponent);

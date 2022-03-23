@@ -2,7 +2,6 @@ import DefaultUserAvatar from "../../assetss/ava.jpg";
 import "./Users.css";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import axios from 'axios'
 
 const Users = (props) => {
   let totalPage = Math.ceil(props.totalCount / props.count);
@@ -20,7 +19,7 @@ const Users = (props) => {
               return (
                 <span
                   key={p}
-                  className={props.activePag === p && "active"}
+                  className={props.activePag === p ? "active" : null}
                   onClick={() => props.onSetActivePag(p)}
                 >
                   {p}
@@ -50,33 +49,31 @@ const Users = (props) => {
                 </div>
                 <div className="users__follow">
                   {!user.followed ? (
-                    <button onClick={() => {
-                      axios.post('https://social-network.samuraijs.com/api/1.0/follow/' + user.id, null, {
-                        withCredentials: true,
-                        headers: {
-                          'API-KEY' : "80fef642-e7fd-43ef-8b25-aaf185dbdf76"
-                        }
-                      }).then(res => {
-                        if(res.data.resultCode == 0) {
-                          props.onFollow(user.id);
-                        }
-                      })
-                    }}>
+                    <button
+                      disabled={props.isFollowing.some((id) => id == user.id)}
+                      className={
+                        props.isFollowing.some((id) => id == user.id)
+                          ? "is-disable"
+                          : null
+                      }
+                      onClick={() => {
+                        props.onFollow(user.id);
+                      }}
+                    >
                       follow
                     </button>
                   ) : (
-                    <button onClick={() => {
-                      axios.delete('https://social-network.samuraijs.com/api/1.0/follow/' + user.id, {
-                        withCredentials: true,
-                        headers: {
-                          'API-KEY' : "80fef642-e7fd-43ef-8b25-aaf185dbdf76"
-                        }
-                      }).then(res => {
-                        if (res.data.resultCode == 0) {
-                          props.onUnFollow(user.id);
-                        }
-                      })
-                    }}>
+                    <button
+                      disabled={props.isFollowing.some((id) => id == user.id)}
+                      className={
+                        props.isFollowing.some((id) => id == user.id)
+                          ? "is-disable"
+                          : null
+                      }
+                      onClick={() => {
+                        props.onUnFollow(user.id);
+                      }}
+                    >
                       Unfollow
                     </button>
                   )}

@@ -25,3 +25,9 @@
   font-style: italic;
   letter-spacing: normal;
 }
+
+.profile__status
+{
+  margin-top: 20px;
+  padding-bottom: 20px;
+}

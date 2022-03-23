@@ -1,10 +1,13 @@
+import { accessToApiProp } from "../api/api";
+
 let initialState = {
   users: [],
   page: 1,
   count: 3,
-  totalCount: 100,
+  totalCount: 60,
   activePag: 1,
   preloader: true,
+  isFollowing: [],
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -49,6 +52,14 @@ const usersReducer = (state = initialState, action) => {
         preloader: action.bool,
       };
     }
+    case "IS-FOLLOWING": {
+      return {
+        ...state,
+        isFollowing: action.bool
+          ? [...state.isFollowing, action.userId]
+          : state.isFollowing.filter((id) => id != action.userId),
+      };
+    }
     default:
       return state;
   }
@@ -88,5 +99,47 @@ export const offPreloader = (bool) => {
     bool,
   };
 };
+export const setIsFollowing = (bool, userId) => {
+  return {
+    type: "IS-FOLLOWING",
+    bool,
+    userId,
+  };
+};
+
+export const getUsersThunk = (count, pageSize) => {
+  return (dispatch) => {
+    dispatch(offPreloader(true));
+    accessToApiProp.getUsers(count, pageSize).then((data) => {
+      dispatch(onSetUsers(data.items));
+      dispatch(offPreloader(false));
+    });
+  };
+};
+
+
+export const onFollowThunk = (userId) => {
+  return dispatch => {
+    dispatch(setIsFollowing(true, userId));
+    accessToApiProp.follow(userId).then((data) => {
+      if (data.resultCode == 0) {
+        dispatch(onFollow(userId));
+        dispatch(setIsFollowing(false, userId));
+      }
+    });
+  }
+}
+
+export const onUnFollowThunk = (userId) => {
+  return dispatch => {
+    dispatch(setIsFollowing(true, userId));
+    accessToApiProp.unFollow(userId).then((data) => {
+      if (data.resultCode == 0) {
+        dispatch(onUnFollow(userId));
+        dispatch(setIsFollowing(false, userId));
+      }
+    });
+  }
+}
 
 export default usersReducer;

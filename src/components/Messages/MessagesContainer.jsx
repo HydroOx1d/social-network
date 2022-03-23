@@ -4,10 +4,12 @@ import {
 } from "../../redux/messagesReducer";
 import Messages from "./Messages";
 import { connect } from "react-redux";
+import {requireAuthHOC} from '../../hoc/requireAuth'
+import { compose } from "redux";
 
 const mapStateToProps = (state) => {
   return {
-    state: state.messages,
+    state: state.messages
   };
 };
 
@@ -22,9 +24,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const MessagesContainer = connect(
+export default compose(
+  connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Messages);
-
-export default MessagesContainer;
+  mapDispatchToProps),)(Messages)

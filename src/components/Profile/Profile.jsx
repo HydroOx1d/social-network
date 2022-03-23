@@ -3,7 +3,6 @@ import Background from "../../assetss/profile-background.jpg";
 import Avatar from "../../assetss/ava.jpg";
 import "./Profile.css";
 import ProfilePostsContainer from "./ProfilePosts/ProfilePosts";
-import { useParams } from "react-router-dom";
 
 const Profile = (props) => {
   if (!props.profileData) {
@@ -14,10 +13,10 @@ const Profile = (props) => {
     <section className="profile">
       <div className="profile__view">
         <div className="profile__background">
-          <img src={Background} alt="BACKGROUND" />
+          <img src={props.profileData.photos.large || Background} alt="BACKGROUND" />
         </div>
         <div className="profile__avatar">
-          <img src={Avatar} alt="AVATAR" />
+          <img src={props.profileData.photos.small || Avatar} alt="AVATAR" />
         </div>
         <div className="profile__name">
           <h2>{props.profileData.fullName}</h2>
@@ -25,7 +24,7 @@ const Profile = (props) => {
       </div>
       <div className="profile__information">
         <ProfilePostsContainer />
-        <ProfileInfo profileData={props.profileData} />
+        <ProfileInfo profileData={props.profileData} statusText={props.status} updateStatus={props.updateStatusThunk}/>
       </div>
     </section>
   );

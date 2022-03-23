@@ -1,4 +1,5 @@
 import "./ProfileInfo.css";
+import ProfileStatus from "./ProfileStatus/ProfileStatus";
 
 const ProfileInfo = (props) => {
   return (
@@ -29,6 +30,10 @@ const ProfileInfo = (props) => {
           </ul>
         </div>
       </div>
+      <ProfileStatus
+        statusText={props.statusText}
+        updateStatus={props.updateStatus}
+      />
     </div>
   );
 };
