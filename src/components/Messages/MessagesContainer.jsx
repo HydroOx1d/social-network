@@ -15,16 +15,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    newAreaMessages(event) {
-      dispatch(newAreaMessagesAction(event));
-    },
-    addMessages() {
-      dispatch(addMessagesAction());
+    addMessages(obj) {
+      dispatch(addMessagesAction(obj));
     },
   };
 };
 
 export default compose(
-  connect(
-  mapStateToProps,
-  mapDispatchToProps),)(Messages)
+  connect(mapStateToProps, mapDispatchToProps),
+  requireAuthHOC
+)(Messages);

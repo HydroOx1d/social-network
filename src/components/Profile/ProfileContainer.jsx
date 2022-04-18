@@ -1,32 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Profile from "./Profile";
 import { connect } from "react-redux";
 import {
   setProfileDataThunk,
   setStatusThunk,
   updateStatusThunk,
+  uploadProfileAvatar,
+  updateProfileInfo,
 } from "../../redux/profileReducer";
-import {requireAuthHOC} from '../../hoc/requireAuth'
-import {withRouter} from '../../hoc/withRouters'
+import { withRouter } from "../../hoc/withRouters";
 import { compose } from "redux";
+import { useNavigate } from "react-router-dom";
 
-class ProfileContainer extends React.Component {
-  componentDidMount() {
-    let userId = this?.props?.match?.params?.userId
-    if(!userId) userId = 22715
-    this.props.setProfileDataThunk(userId)
-    this.props.setStatusThunk(userId)
-  }
+const ProfileContainer = (props) => {
+  let history = useNavigate();
+  let userId = props?.match?.params?.userId;
+  useEffect(() => {
+    if (!userId) {
+      userId = props.loginUserId;
+      if (!userId) {
+        history("/login");
+      }
+    }
+    props.setProfileDataThunk(userId);
+    props.setStatusThunk(userId);
+  }, [props.loginUserId, userId]);
 
-  render() {
-    return <Profile {...this.props} />;
-  }
-}
+  return <Profile {...props} isOwner={!userId}/>;
+};
 
 const mapStateToProps = (state) => {
   return {
     profileData: state.profile.profileData,
-    status: state.profile.status
+    status: state.profile.status,
+
+    isAuth: state.auth.isAuth,
+    loginUserId: state.auth.id,
   };
 };
 
@@ -35,6 +44,8 @@ export default compose(
     setProfileDataThunk,
     setStatusThunk,
     updateStatusThunk,
+    uploadProfileAvatar,
+    updateProfileInfo,
   }),
   withRouter
 )(ProfileContainer);

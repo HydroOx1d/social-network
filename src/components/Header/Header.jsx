@@ -20,7 +20,6 @@ const Header = (props) => {
     );
   }
   return (
-
     <header className="header">
       <div className="header__logo">
         <img src={Logo} alt="LOGO" />
@@ -29,7 +28,13 @@ const Header = (props) => {
       <Nav />
 
       <div className="header__login">
-        {props.isAuth ? props.login : <NavLink to="/login">Login</NavLink>}
+        {props.isAuth ? (
+          <div>
+            {props.login} <button onClick={props.logoutThunk}>Logout</button>
+          </div>
+        ) : (
+          <NavLink to="/login">Login</NavLink>
+        )}
       </div>
     </header>
   );

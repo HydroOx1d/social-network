@@ -5,7 +5,9 @@ const initialState = {
   email: null,
   login: null,
   isAuth: false,
-  resultCode: null,
+
+  loginSuccess: false,
+  errorMessage: "",
 };
 
 const authReducer = (state = initialState, action) => {
@@ -14,12 +16,20 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.authData,
+        isAuth: true,
       };
     }
-    case "SET-IS-AUTH": {
+    case "LOGOUT": {
       return {
         ...state,
-        isAuth: action.code === 0 ? true : false,
+        ...action.authData,
+      };
+    }
+    case "SUBMISSION-ERROR": {
+      return {
+        ...state,
+        loginSuccess: action.loginSuccess,
+        errorMessage: action.errorMessage,
       };
     }
     default:
@@ -30,37 +40,55 @@ const authReducer = (state = initialState, action) => {
 export const setAuthData = (authData) => {
   return { type: "AUTH", authData };
 };
-export const setIsAuth = (code) => {
+export const logout = (
+  authData = { id: null, email: null, login: null, isAuth: false }
+) => {
   return {
-    type: "SET-IS-AUTH",
-    code,
+    type: "LOGOUT",
+    authData,
+  };
+};
+const errorMess = (loginSuccess, errorMessage) => {
+  return {
+    type: "SUBMISSION-ERROR",
+    loginSuccess,
+    errorMessage,
   };
 };
 
-export const setIstAuthThunk = () => {
-  return dispatch => {
-    accessToApiProp.setAuthData().then((data) => {
-      dispatch(setIsAuth(data.resultCode));
-      if (data.resultCode === 0) {
-        dispatch(setAuthData(data.data));
-      }
-    });
-  }
-}
+export const setIstAuthThunk = () => (dispatch) => {
+  return accessToApiProp.setAuthData().then((data) => {
+    if (data.resultCode === 0) {
+      dispatch(setAuthData(data.data));
+    }
+  });
+};
 
 export const loginThunk = (loginData) => {
-  return dispatch => {
-    accessToApiProp.login(loginData).then(res => {
-      if(res.data.resultCode === 0) {
+  return (dispatch) => {
+    accessToApiProp.login(loginData).then((res) => {
+      if (res.data.resultCode === 0) {
         accessToApiProp.setAuthData().then((data) => {
-          dispatch(setIsAuth(data.resultCode));
           if (data.resultCode === 0) {
             dispatch(setAuthData(data.data));
+            dispatch(errorMess(true, res.data.messages[0]));
           }
         });
+      } else {
+        dispatch(errorMess(false, res.data.messages[0]));
       }
-    })
-  }
-}
+    });
+  };
+};
+
+export const logoutThunk = () => {
+  return (dispatch) => {
+    accessToApiProp.logout().then((res) => {
+      if (res.data.resultCode === 0) {
+        dispatch(logout());
+      }
+    });
+  };
+};
 
 export default authReducer;

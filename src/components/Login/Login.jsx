@@ -1,4 +1,6 @@
 import { Form, Field } from "react-final-form";
+import { required } from "../common/validator/validate";
+
 
 const Login = (props) => {
   return (
@@ -8,7 +10,7 @@ const Login = (props) => {
       </div>
       <Form
         onSubmit={(formObj) => {
-          let newObj = {...formObj}
+          let newObj = { ...formObj };
           if (!newObj?.rememberMe) {
             newObj.rememberMe = false;
           }
@@ -19,23 +21,42 @@ const Login = (props) => {
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit} className="form login__form">
             <div className="input login__input">
-              <Field name="email">
-                {({ input }) => (
-                  <input type="text" placeholder="Логин" {...input} />
+              <Field name="email" validate={required}>
+                {({ input, meta }) => (
+                  <>
+                    <input type="text" placeholder="Логин" {...input} />
+                    <span>{meta.error && meta.touched && meta.error}</span>
+                  </>
                 )}
               </Field>
             </div>
             <div className="input login__input">
-              <Field name="password">
-                {({ input }) => <input type="text" placeholder="Пароль" {...input}/>}
+              <Field name="password" validate={required}>
+                {({ input, meta }) => (
+                  <>
+                    <input type="text" placeholder="Пароль" {...input} />
+                    <span>{meta.error && meta.touched && meta.error}</span>
+                  </>
+                )}
               </Field>
             </div>
             <div className="input login__input">
               <Field name="rememberMe" type="checkbox">
-                {({input}) => <input type="checkbox" {...input} />} 
-              </Field> 
+                {({ input }) => <input type="checkbox" {...input} />}
+              </Field>
               <span>Запомнить меня</span>
             </div>
+
+            {
+              !props.loginSuccess ? (
+                <div className="error login__error">
+                  <span>{props.errorMessage}</span>
+                </div>  
+              ) : (
+                ''
+              )
+            }
+
             <div className="btn-block login__btn-block">
               <button className="btn login__btn">Логин</button>
             </div>

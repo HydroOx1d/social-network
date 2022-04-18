@@ -11,39 +11,27 @@ let initialState = {
     { id: 2, message: "Аллейкум" },
     { id: 3, message: "Как сам?" },
   ],
-  textAreaValue: "",
 };
 
 const messagesReducer = (state = initialState, action) => {
   if (action.type === "ADD-MESSAGES") {
     let obj = {
-      id: 5,
-      message: state.textAreaValue,
-    };
+      id: 4, 
+      message: action.message
+    }
     return {
       ...state,
       messagesDialogData: [...state.messagesDialogData, obj],
-      textAreaValue: "",
-    };
-  } else if (action.type === "TEXT-AREA-UPDATE-VALUE") {
-    return {
-      ...state,
-      textAreaValue: action.value,
     };
   }
   return state;
 };
 
-export const newAreaMessagesAction = (value) => {
-  return {
-    type: "TEXT-AREA-UPDATE-VALUE",
-    value: value,
-  };
-};
 
-export const addMessagesAction = () => {
+export const addMessagesAction = (message) => {
   return {
     type: "ADD-MESSAGES",
+    message
   };
 };
 

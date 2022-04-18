@@ -51,20 +51,3 @@
 .users__follow button.is-disable {
   cursor: wait
 }
-
-.users__pagination {
-  margin: 30px 0;
-}
-
-.users__pagination span {
-  cursor: pointer;
-  padding: 10px;
-  border: 1px solid #ffffff;
-  font-family: "Droid Sans Mono" sans-serif;
-  margin: 0px 10px
-}
-
-.users__pagination span.active {
-  background: #ffffff;
-  color: #000;
-}

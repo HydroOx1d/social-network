@@ -7,7 +7,6 @@ import {
   getUsersThunk,
 } from "../../redux/usersReducer";
 import React from "react";
-import { requireAuthHOC } from "../../hoc/requireAuth";
 import { compose } from "redux";
 
 class UsersAPIComponent extends React.Component {

@@ -6,7 +6,6 @@ let initialState = {
     { id: 2, text: "О привет" },
     { id: 3, text: "Не тот танк, кто танк, а тот танк, кто тааанк!" },
   ],
-  profileAddPostValues: "",
   profileData: null,
   status: ''
 };
@@ -16,18 +15,11 @@ const profileReducer = (state = initialState, action) => {
     case "ADD-PROFILE-POST": {
       let obj = {
         id: 4,
-        text: state.profileAddPostValues,
+        text: action.desc,
       };
       return {
         ...state,
         profilePostData: [...state.profilePostData, obj],
-        profileAddPostValues: "",
-      };
-    }
-    case "ADD-PROFILE-POST-VALUE": {
-      return {
-        ...state,
-        profileAddPostValues: action.value,
       };
     }
     case "SET-PROFILE": {
@@ -35,6 +27,12 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         profileData: action.profileData,
       };
+    }
+    case "UPDATE-PROFILE-AVATAR": {
+      return {
+        ...state,
+        profileData: {...state.profileData, photos: action.photos}
+      }
     }
     case "SET-STATUS": {
       return {
@@ -45,12 +43,8 @@ const profileReducer = (state = initialState, action) => {
   }
   return state;
 };
-
-export const changeValueAction = (e) => {
-  return { type: "ADD-PROFILE-POST-VALUE", value: e.target.value };
-};
-export const addProfilePost = () => {
-  return { type: "ADD-PROFILE-POST" };
+export const addProfilePost = (desc) => {
+  return { type: "ADD-PROFILE-POST", desc};
 };
 
 export const setProfile = (profileData) => {
@@ -60,6 +54,13 @@ export const setProfile = (profileData) => {
 export const setStatus = (status) => {
   return {
     type: 'SET-STATUS', status: status
+  }
+}
+
+const updateProfileAvatar = (photos) => {
+  return {
+    type: 'UPDATE-PROFILE-AVATAR',
+    photos
   }
 }
 
@@ -73,7 +74,8 @@ export const setProfileDataThunk = (userId) => {
 
 export const setStatusThunk = (userId) => (dispatch) => {
   accessToApiProp.getProfileStatus(userId).then((data) => {
-    dispatch(setStatus(data))
+    let newData = data ?? ''
+    dispatch(setStatus(newData));
   });
 } 
 export const updateStatusThunk = (status) => (dispatch) => {
@@ -83,4 +85,26 @@ export const updateStatusThunk = (status) => (dispatch) => {
     }
   })
 }
+
+export const uploadProfileAvatar = (photos) => {
+  return dispatch => {
+    accessToApiProp.updateProfileAvatar(photos).then(res => {
+      if(res.data.resultCode === 0) {
+        dispatch(updateProfileAvatar(res.data.data.photos));
+      }
+    })
+  }
+}
+
+export const updateProfileInfo = (updatedInfo) => {
+  return (dispatch, getState) => {
+    const userId = getState().auth.id;
+    accessToApiProp.updateProfileInfo(updatedInfo).then((res) => {
+      if(res.data.resultCode === 0) {
+        dispatch(setProfileDataThunk(userId));
+      }
+    });
+  }
+}
+
 export default profileReducer;

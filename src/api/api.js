@@ -4,7 +4,7 @@ const instanceOfAxios = axios.create({
   withCredentials: true,
   baseURL: "https://social-network.samuraijs.com/api/1.0/",
   headers: {
-    "API-KEY": "d4922305-4c8c-4604-9745-bae759e2c1e6",
+    "API-KEY": "ec9763af-c974-482b-ad14-6196edbb10f2",
   },
 });
 
@@ -13,7 +13,10 @@ export const accessToApiProp = {
     return instanceOfAxios.get("auth/me").then((res) => res.data);
   },
   login(loginData) {
-    return instanceOfAxios.post('auth/login', loginData).then(res => res)
+    return instanceOfAxios.post("auth/login", loginData).then((res) => res);
+  },
+  logout() {
+    return instanceOfAxios.delete("auth/login").then((res) => res);
   },
 
   getUsers(count, pageSize) {
@@ -31,11 +34,27 @@ export const accessToApiProp = {
   setProfileData(userId) {
     return instanceOfAxios.get("profile/" + userId).then((res) => res.data);
   },
+  updateProfileAvatar(photos) {
+    const formData = new FormData();
+    formData.append("images", photos);
+    return instanceOfAxios.put("profile/photo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+  updateProfileInfo(updatedInfo) {
+    return instanceOfAxios.put("profile", updatedInfo);
+  },
 
   getProfileStatus(userId) {
-    return instanceOfAxios.get('profile/status/' + userId ).then(res => res.data)
+    return instanceOfAxios
+      .get("profile/status/" + userId)
+      .then((res) => res.data);
   },
   updateProfileStatus(status) {
-    return instanceOfAxios.put('profile/status', {status: status}).then(res => res)
-  }
+    return instanceOfAxios
+      .put("profile/status", { status: status })
+      .then((res) => res);
+  },
 };

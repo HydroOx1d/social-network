@@ -3,8 +3,8 @@ import { accessToApiProp } from "../api/api";
 let initialState = {
   users: [],
   page: 1,
-  count: 3,
-  totalCount: 60,
+  count: 10,
+  totalCount: 1,
   activePag: 1,
   preloader: true,
   isFollowing: [],
@@ -44,6 +44,12 @@ const usersReducer = (state = initialState, action) => {
       return {
         ...state,
         activePag: action.pageNumber,
+      };
+    }
+    case "SET-TOTAL-COUNT": {
+      return {
+        ...state,
+        totalCount: action.totalCount
       };
     }
     case "PRELOADER-OFF": {
@@ -93,6 +99,13 @@ export const setActivePag = (pageNumber) => {
   };
 };
 
+const setTotalCount = (totalCount) => {
+  return {
+    type: "SET-TOTAL-COUNT",
+    totalCount
+  };
+}
+
 export const offPreloader = (bool) => {
   return {
     type: "PRELOADER-OFF",
@@ -112,6 +125,7 @@ export const getUsersThunk = (count, pageSize) => {
     dispatch(offPreloader(true));
     accessToApiProp.getUsers(count, pageSize).then((data) => {
       dispatch(onSetUsers(data.items));
+      dispatch(setTotalCount(data.totalCount));
       dispatch(offPreloader(false));
     });
   };

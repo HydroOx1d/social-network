@@ -25,11 +25,36 @@
   max-height: 220px;
 }
 
-.profile__avatar img {
+.profile__avatar .avatar-img {
   width: 200px;
   height: 200px;
   border-radius: 50%;
   border: 10px solid #323232;
+}
+
+.profile__upload-image {
+  position: absolute;
+  z-index: 10;
+  bottom: 45px;
+  right: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profile__upload-image label {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+.profile__upload-image #avatar {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 
 .profile__name {
