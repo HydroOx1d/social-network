@@ -43,9 +43,9 @@ const Users = (props) => {
                   <div className="users__follow">
                     {!user.followed ? (
                       <button
-                        disabled={props.isFollowing.some((id) => id == user.id)}
+                        disabled={props.isFollowing.some((id) => id === user.id)}
                         className={
-                          props.isFollowing.some((id) => id == user.id)
+                          props.isFollowing.some((id) => id === user.id)
                             ? "is-disable"
                             : null
                         }
@@ -57,9 +57,9 @@ const Users = (props) => {
                       </button>
                     ) : (
                       <button
-                        disabled={props.isFollowing.some((id) => id == user.id)}
+                        disabled={props.isFollowing.some((id) => id === user.id)}
                         className={
-                          props.isFollowing.some((id) => id == user.id)
+                          props.isFollowing.some((id) => id === user.id)
                             ? "is-disable"
                             : null
                         }

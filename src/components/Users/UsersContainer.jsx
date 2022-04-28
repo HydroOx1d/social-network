@@ -5,7 +5,7 @@ import {
   onUnFollowThunk,
   setActivePag,
   getUsersThunk,
-} from "../../redux/usersReducer";
+} from "../../redux/usersReducer.ts";
 import React from "react";
 import { compose } from "redux";
 

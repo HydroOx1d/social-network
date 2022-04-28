@@ -7,7 +7,7 @@ import {
   updateStatusThunk,
   uploadProfileAvatar,
   updateProfileInfo,
-} from "../../redux/profileReducer";
+} from "../../redux/profileReducer.ts";
 import { withRouter } from "../../hoc/withRouters";
 import { compose } from "redux";
 import { useNavigate } from "react-router-dom";

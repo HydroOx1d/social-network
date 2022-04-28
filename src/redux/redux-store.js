@@ -1,10 +1,10 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import profileReducer from "./profileReducer";
-import messagesReducer from "./messagesReducer";
-import usersReducer from "./usersReducer";
-import authReducer from "./authReducer";
+import profileReducer from "./profileReducer.ts";
+import messagesReducer from "./messagesReducer.ts";
+import usersReducer from "./usersReducer.ts";
+import authReducer from "./authReducer.ts";
 import thunk from 'redux-thunk'
-import { appReducer } from "./appReducer";
+import { appReducer } from "./appReducer.ts";
 
 let reducers = combineReducers({
   profile: profileReducer,

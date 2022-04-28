@@ -1,7 +1,7 @@
 import {
   addMessagesAction,
   newAreaMessagesAction,
-} from "../../redux/messagesReducer";
+} from "../../redux/messagesReducer.ts";
 import Messages from "./Messages";
 import { connect } from "react-redux";
 import {requireAuthHOC} from '../../hoc/requireAuth'

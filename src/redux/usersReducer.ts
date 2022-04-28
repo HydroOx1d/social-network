@@ -1,6 +1,27 @@
 import { accessToApiProp } from "../api/api";
+import { UsersType } from '../types/types';
 
-let initialState = {
+const FOLLOW = "usersReducer/FOLLOW";
+const UN_FOLLOW = "usersReducer/UN-FOLLOW";
+const SET_USERS = "usersReducer/SET-USERS";
+const SET_ACTIVE_PAG = "usersReducer/SET-ACTIVE-PAG";
+const SET_TOTAL_COUNT = "usersReducer/SET-TOTAL-COUNT";
+const PRELOADER_OFF = "usersReducer/PRELOADER-OFF";
+const IS_FOLLOWING = "usersReducer/IS-FOLLOWING";
+
+
+
+type InitialStateType = {
+  users: Array<UsersType>
+  page: number
+  count: number
+  totalCount: number
+  activePag: number
+  preloader: boolean
+  isFollowing: Array<number>
+}
+
+let initialState: InitialStateType = {
   users: [],
   page: 1,
   count: 10,
@@ -10,9 +31,9 @@ let initialState = {
   isFollowing: [],
 };
 
-const usersReducer = (state = initialState, action) => {
+const usersReducer = (state = initialState, action: any): InitialStateType => {
   switch (action.type) {
-    case "FOLLOW": {
+    case FOLLOW: {
       return {
         ...state,
         users: state.users.map((user) => {
@@ -23,7 +44,7 @@ const usersReducer = (state = initialState, action) => {
         }),
       };
     }
-    case "UN-FOLLOW": {
+    case UN_FOLLOW: {
       return {
         ...state,
         users: state.users.map((user) => {
@@ -34,36 +55,36 @@ const usersReducer = (state = initialState, action) => {
         }),
       };
     }
-    case "SET-USERS": {
+    case SET_USERS: {
       return {
         ...state,
         users: [...action.users],
       };
     }
-    case "SET-ACTIVE-PAG": {
+    case SET_ACTIVE_PAG: {
       return {
         ...state,
         activePag: action.pageNumber,
       };
     }
-    case "SET-TOTAL-COUNT": {
+    case SET_TOTAL_COUNT: {
       return {
         ...state,
         totalCount: action.totalCount
       };
     }
-    case "PRELOADER-OFF": {
+    case PRELOADER_OFF: {
       return {
         ...state,
         preloader: action.bool,
       };
     }
-    case "IS-FOLLOWING": {
+    case IS_FOLLOWING: {
       return {
         ...state,
         isFollowing: action.bool
           ? [...state.isFollowing, action.userId]
-          : state.isFollowing.filter((id) => id != action.userId),
+          : state.isFollowing.filter((id) => id !== action.userId),
       };
     }
     default:
@@ -71,50 +92,86 @@ const usersReducer = (state = initialState, action) => {
   }
 };
 
-export const onFollow = (userId) => {
+type OnFollowType = {
+  type: typeof FOLLOW
+  userId: number
+}
+
+export const onFollow = (userId: number): OnFollowType => {
   return {
-    type: "FOLLOW",
+    type: FOLLOW,
     userId,
   };
 };
 
-export const onUnFollow = (userId) => {
+type OnUnFollowType = {
+  type: typeof UN_FOLLOW
+  userId: number
+}
+
+export const onUnFollow = (userId: number): OnUnFollowType => {
   return {
-    type: "UN-FOLLOW",
+    type: UN_FOLLOW,
     userId,
   };
 };
 
-export const onSetUsers = (users) => {
+type OnSetUsersType = {
+  type: typeof SET_USERS
+  users: Array<UsersType>
+}
+
+export const onSetUsers = (users: Array<UsersType>): OnSetUsersType => {
   return {
-    type: "SET-USERS",
+    type: SET_USERS,
     users,
   };
 };
 
-export const setActivePag = (pageNumber) => {
+type SetActivePagType = {
+  type: typeof SET_ACTIVE_PAG
+  pageNumber: number
+}
+
+export const setActivePag = (pageNumber: number): SetActivePagType => {
   return {
-    type: "SET-ACTIVE-PAG",
+    type: SET_ACTIVE_PAG,
     pageNumber,
   };
 };
 
-const setTotalCount = (totalCount) => {
+type SetTotalCountType = {
+  type: typeof SET_TOTAL_COUNT
+  totalCount: number
+}
+
+const setTotalCount = (totalCount: number): SetTotalCountType => {
   return {
-    type: "SET-TOTAL-COUNT",
+    type: SET_TOTAL_COUNT,
     totalCount
   };
 }
 
-export const offPreloader = (bool) => {
+type OffPreloaderType = {
+  type: typeof PRELOADER_OFF
+  bool: boolean
+}
+
+export const offPreloader = (bool: boolean): OffPreloaderType => {
   return {
-    type: "PRELOADER-OFF",
+    type: PRELOADER_OFF,
     bool,
   };
 };
-export const setIsFollowing = (bool, userId) => {
+
+type SetIsFollowingType = {
+  type: typeof IS_FOLLOWING
+  bool: boolean
+  userId: number
+}
+export const setIsFollowing = (bool: boolean, userId: number): SetIsFollowingType => {
   return {
-    type: "IS-FOLLOWING",
+    type: IS_FOLLOWING,
     bool,
     userId,
   };
@@ -136,7 +193,7 @@ export const onFollowThunk = (userId) => {
   return dispatch => {
     dispatch(setIsFollowing(true, userId));
     accessToApiProp.follow(userId).then((data) => {
-      if (data.resultCode == 0) {
+      if (data.resultCode === 0) {
         dispatch(onFollow(userId));
         dispatch(setIsFollowing(false, userId));
       }
@@ -148,7 +205,7 @@ export const onUnFollowThunk = (userId) => {
   return dispatch => {
     dispatch(setIsFollowing(true, userId));
     accessToApiProp.unFollow(userId).then((data) => {
-      if (data.resultCode == 0) {
+      if (data.resultCode === 0) {
         dispatch(onUnFollow(userId));
         dispatch(setIsFollowing(false, userId));
       }

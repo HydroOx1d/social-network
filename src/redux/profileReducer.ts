@@ -1,18 +1,31 @@
 import {accessToApiProp} from '../api/api'
+import { ProfilePostDataType, ProfileDataType, ProfileDataPhotosType } from '../types/types';
 
-let initialState = {
+const ADD_PROFILE_POST = "profileReducer/ADD-PROFILE-POST";
+const SET_PROFILE = "profileReducer/SET-PROFILE";
+const UPDATE_PROFILE_AVATAR = "profileReducer/UPDATE-PROFILE-AVATAR";
+const SET_STATUS = "profileReducer/SET-STATUS";
+
+
+type InitialStateType = {
+  profilePostData: Array<ProfilePostDataType>;
+  profileData: null | ProfileDataType;
+  status: string
+};
+
+let initialState: InitialStateType = {
   profilePostData: [
     { id: 1, text: "О, вот и новый пост :)" },
     { id: 2, text: "О привет" },
     { id: 3, text: "Не тот танк, кто танк, а тот танк, кто тааанк!" },
   ],
   profileData: null,
-  status: ''
+  status: "",
 };
 
-const profileReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action: any): InitialStateType => {
   switch (action.type) {
-    case "ADD-PROFILE-POST": {
+    case ADD_PROFILE_POST: {
       let obj = {
         id: 4,
         text: action.desc,
@@ -22,19 +35,19 @@ const profileReducer = (state = initialState, action) => {
         profilePostData: [...state.profilePostData, obj],
       };
     }
-    case "SET-PROFILE": {
+    case SET_PROFILE: {
       return {
         ...state,
         profileData: action.profileData,
       };
     }
-    case "UPDATE-PROFILE-AVATAR": {
+    case UPDATE_PROFILE_AVATAR: {
       return {
         ...state,
         profileData: {...state.profileData, photos: action.photos}
       }
     }
-    case "SET-STATUS": {
+    case SET_STATUS: {
       return {
         ...state,
         status: action.status
@@ -43,23 +56,44 @@ const profileReducer = (state = initialState, action) => {
   }
   return state;
 };
-export const addProfilePost = (desc) => {
-  return { type: "ADD-PROFILE-POST", desc};
+
+type addProfilePostType = {
+  type: typeof ADD_PROFILE_POST
+  desc: string
+}
+
+export const addProfilePost = (desc: string): addProfilePostType => {
+  return { type: ADD_PROFILE_POST, desc};
 };
 
-export const setProfile = (profileData) => {
-  return { type: "SET-PROFILE", profileData };
+type SetProfileType = {
+  type: typeof SET_PROFILE
+  profileData: ProfileDataType
+}
+
+export const setProfile = (profileData: ProfileDataType): SetProfileType => {
+  return { type: SET_PROFILE, profileData };
 };
 
-export const setStatus = (status) => {
+type SetStatusType = {
+  type: typeof SET_STATUS
+  status: string
+}
+
+export const setStatus = (status: string): SetStatusType => {
   return {
-    type: 'SET-STATUS', status: status
+    type: SET_STATUS, status: status
   }
 }
 
-const updateProfileAvatar = (photos) => {
+type UpdateProfileAvatarType = {
+  type: typeof UPDATE_PROFILE_AVATAR
+  photos: ProfileDataPhotosType
+}
+
+const updateProfileAvatar = (photos: ProfileDataPhotosType): UpdateProfileAvatarType => {
   return {
-    type: 'UPDATE-PROFILE-AVATAR',
+    type: UPDATE_PROFILE_AVATAR,
     photos
   }
 }

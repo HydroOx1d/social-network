@@ -1,6 +1,6 @@
 import {
   addProfilePost,
-} from "../../../../redux/profileReducer";
+} from "../../../../redux/profileReducer.ts";
 import ProfileAddPost from "./ProfileAddPost";
 import { connect } from "react-redux";
 

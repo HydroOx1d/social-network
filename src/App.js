@@ -8,7 +8,7 @@ import UsersContainer from "./components/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import LoginContainer from "./components/Login/LoginContainer";
 import { connect } from "react-redux";
-import { initializeAppThunk } from "./redux/appReducer";
+import { initializeAppThunk } from "./redux/appReducer.ts";
 
 const App = (props) => {
   useEffect(() => {
